@@ -12,7 +12,7 @@ public class Logic {
     public static List<Triangle> readListFromFile(String path) throws FileNotFoundException, NullPointerException,
             ArrayIndexOutOfBoundsException, NotTriangle, NumberFormatException {
         try (Scanner scanner = new Scanner(new File(path))) {
-            List<Triangle> list = new LinkedList<>();
+            List<Triangle> list = new ArrayList<>();
             while (scanner.hasNext()) {
                 Point[] points = new Point[3];
                 for (int i = 0; i < 3; i++) {
@@ -28,22 +28,23 @@ public class Logic {
 
     public static List<List<Triangle>> findSimilarTriangles(List<Triangle> list) {
         List<List<Triangle>> answer = new ArrayList<>();
-        while (list.size() != 0) {
+        ListIterator<Triangle> listIterator = list.listIterator();
+        while (listIterator.hasNext()) {
             List<Triangle> nowSimilar = new ArrayList<>();
-            Triangle now = list.get(0);
-            list.remove(0);
+            Triangle now = listIterator.next();
             nowSimilar.add(now);
-            for (int i = 0; i < list.size(); i++) {
-                double c1 = now.getL1() / list.get(i).getL1();
-                double c2 = now.getL2() / list.get(i).getL2();
-                double c3 = now.getL3() / list.get(i).getL3();
-                if (Math.abs(c1 - c2) < 1e-7 && Math.abs(c2 - c3) < 1e-7) {
-                    nowSimilar.add(list.get(i));
-                    list.remove(i);
-                    i--;
+            listIterator.remove();
+            while (listIterator.hasNext()){
+                Triangle other = listIterator.next();
+                if(now.isSimilarTo(other)){
+                    nowSimilar.add(other);
+                    listIterator.remove();
                 }
             }
             answer.add(nowSimilar);
+            while(listIterator.hasPrevious()){
+                listIterator.previous();    //тут ничего не делаю, чтобы по порядку выводил
+            }
         }
         return answer;
     }
@@ -110,7 +111,7 @@ public class Logic {
     }
 
     public static List<Triangle> toTriangleList(double[][] mas) throws NotTriangle {
-        List<Triangle> list = new LinkedList<>();
+        List<Triangle> list = new ArrayList<>();
         for (int i = 0; i < mas.length; i += 3) {
             Point p1 = new Point(mas[i][0], mas[i][1]);
             Point p2 = new Point(mas[i + 1][0], mas[i + 1][1]);

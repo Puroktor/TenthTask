@@ -30,30 +30,30 @@ public class ConsoleMain {
 
     public static InputArgs parseCmdArgs(String[] args) throws DoublePathException {
         InputArgs inputArgs = new InputArgs();
-        if (args.length == 2 && !args[0].contains("-i") && !args[0].contains("-o") && !args[0].contains("--input-file=")
-                && !args[0].contains("–-output-file=") && !args[1].contains("-i") && !args[1].contains("-o") &&
-                !args[1].contains("--input-file=") && !args[1].contains("–-output-file=")) {
+        if (args.length == 2 && !args[0].startsWith("-i") && !args[0].startsWith("-o") && !args[0].startsWith("--input-file=")
+                && !args[0].startsWith("–-output-file=") && !args[1].startsWith("-i") && !args[1].startsWith("-o") &&
+                !args[1].startsWith("--input-file=") && !args[1].startsWith("–-output-file=")) {
             inputArgs.setInputFile(args[0]);
             inputArgs.setOutputFile(args[1]);
         } else {
             for (int i = 0; i < args.length; i++) {
-                if (args[i].contains("--input-file=")) {
+                if (args[i].startsWith("--input-file=")) {
                     if (inputArgs.getInputFile() != null)
                         throw new DoublePathException("input");
                     else
-                        inputArgs.setInputFile(args[i].replace("--input-file=", ""));
-                } else if (args[i].contains("–-output-file=")) {
+                        inputArgs.setInputFile(args[i].substring("--input-file=".length()));
+                } else if (args[i].startsWith("–-output-file=")) {
                     if (inputArgs.getOutputFile() != null)
                         throw new DoublePathException("output");
                     else
-                        inputArgs.setOutputFile(args[i].replace("–-output-file=", ""));
-                } else if (args[i].contains("-i")) {
+                        inputArgs.setOutputFile(args[i].substring("–-output-file=".length()));
+                } else if (args[i].startsWith("-i")) {
                     if (inputArgs.getInputFile() != null)
                         throw new DoublePathException("input");
-                    else inputArgs.setInputFile(args[i + 1]);
-                } else if (args[i].contains("-o")) {
+                    else inputArgs.setInputFile(args[i].substring(2));
+                } else if (args[i].startsWith("-o")) {
                     if (inputArgs.getOutputFile() != null)
-                        throw new DoublePathException("output");
+                        throw new DoublePathException(args[i].substring(2));
                     else inputArgs.setOutputFile(args[i + 1]);
                 }
             }

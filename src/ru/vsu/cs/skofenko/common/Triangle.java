@@ -15,13 +15,13 @@ public class Triangle {
         this.p1 = p1;
         this.p2 = p2;
         this.p3 = p3;
-        CheckIsTriangle();
+        checkIsTriangle();
     }
 
-    private void CheckIsTriangle() throws NotTriangle {
-        double a = getLength(p1, p2);
-        double b = getLength(p1, p3);
-        double c = getLength(p2, p3);
+    private void checkIsTriangle() throws NotTriangle {
+        double a = p1.distanceTo(p2);
+        double b = p1.distanceTo(p3);
+        double c = p2.distanceTo(p3);
         if (a + b > c && a + c > b && b + c > a) {
             Double[] arr = {a, b, c};
             Arrays.sort(arr);
@@ -33,8 +33,11 @@ public class Triangle {
         }
     }
 
-    private double getLength(Point point1, Point point2) {
-        return Math.sqrt(Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2));
+    public boolean isSimilarTo(Triangle other){
+        double c1 = l1/other.getL1();
+        double c2 = l2/other.getL2();
+        double c3 = l3/other.getL3();
+        return Math.abs(c1 - c2) < 1e-7 && Math.abs(c2 - c3) < 1e-7;
     }
 
     public double getL1() {
