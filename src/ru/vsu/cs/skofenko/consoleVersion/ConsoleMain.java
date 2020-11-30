@@ -36,25 +36,25 @@ public class ConsoleMain {
             inputArgs.setInputFile(args[0]);
             inputArgs.setOutputFile(args[1]);
         } else {
-            for (int i = 0; i < args.length; i++) {
-                if (args[i].startsWith("--input-file=")) {
+            for (String arg : args) {
+                if (arg.startsWith("--input-file=")) {
                     if (inputArgs.getInputFile() != null)
                         throw new DoublePathException("input");
                     else
-                        inputArgs.setInputFile(args[i].substring("--input-file=".length()));
-                } else if (args[i].startsWith("–-output-file=")) {
+                        inputArgs.setInputFile(arg.substring("--input-file=".length()));
+                } else if (arg.startsWith("–-output-file=")) {
                     if (inputArgs.getOutputFile() != null)
                         throw new DoublePathException("output");
                     else
-                        inputArgs.setOutputFile(args[i].substring("–-output-file=".length()));
-                } else if (args[i].startsWith("-i")) {
+                        inputArgs.setOutputFile(arg.substring("–-output-file=".length()));
+                } else if (arg.startsWith("-i")) {
                     if (inputArgs.getInputFile() != null)
                         throw new DoublePathException("input");
-                    else inputArgs.setInputFile(args[i].substring(2));
-                } else if (args[i].startsWith("-o")) {
+                    else inputArgs.setInputFile(arg.substring(3));
+                } else if (arg.startsWith("-o")) {
                     if (inputArgs.getOutputFile() != null)
-                        throw new DoublePathException(args[i].substring(2));
-                    else inputArgs.setOutputFile(args[i + 1]);
+                        throw new DoublePathException("output");
+                    else inputArgs.setOutputFile(arg.substring(3));
                 }
             }
         }
